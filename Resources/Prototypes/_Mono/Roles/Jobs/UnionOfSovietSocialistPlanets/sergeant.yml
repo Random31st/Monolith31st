@@ -2,6 +2,7 @@
   id: USSPSergeant
   name: job-name-ussp-sergeant
   description: job-description-ussp-sergeant
+  setPreference: false # Exodus disable-ussp-faction
   playTimeTracker: JobUSSPSergeant
   requirements:
   # - !type:DepartmentTimeRequirement # Disabled until newgens get hours in
@@ -29,6 +30,8 @@
     - type: NpcFactionMember
       factions:
       - USSP
+    - type: ChatRank
+      rank: ussp-sergeant
   - !type:AddLanguageSpecial
     languagesSpoken:
     - NovaCygniBasic

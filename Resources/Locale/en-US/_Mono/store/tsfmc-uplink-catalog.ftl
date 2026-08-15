@@ -117,6 +117,9 @@ uplink-security-t3-altair-voucher-desc = A small card that contains the data for
 uplink-security-t3-polaris-voucher-name = TSFMC Polaris LPC [T3]
 uplink-security-t3-polaris-voucher-desc = A small card that contains the data for the procurement of an Type-56D Polaris-class frigate from the flagship's reserves.
 
+uplink-security-t3-fujian-voucher-name = TSFMC Fujian LPC [T3]
+uplink-security-t3-fujian-voucher-desc = A small card that contains the data for the procurement of an Type-53C Fujian-class escort carrier from the flagship's reserves.
+
 uplink-security-flyssa-voucher-name = TSFMC Flyssa LPC [T4]
 uplink-security-flyssa-voucher-desc = A small card that contains the data for the procurement of a Flyssa-class destroyer from the flagship's reserves.
 uplink-security-antares-voucher-name = TSFMC Antares LPC [T4]
@@ -136,6 +139,9 @@ uplink-security-pulserifle-desc = A large, automatic pulse weapon. Larger cell, 
 # Exodus-faction-ai-core
 uplink-security-faction-ai-core-name = TSFMC Station AI Core
 uplink-security-faction-ai-core-desc = A screwable faction AI core aligned to TSFMC friend-or-foe logic.
+# Exodus: TSF engineer exclusive equipment
+uplink-security-bluespace-rped-name = Bluespace RPED
+uplink-security-bluespace-rped-desc = An advanced rapid part exchange device capable of upgrading machinery at range. Only one is available to the entire TSFMC per shift.
 # Exodus-territory-banner
 uplink-security-banner-tsf-name = TSF banner
 uplink-security-banner-tsf-desc = A banner of the Trans-Solar Federation. Anchor it on a station to claim territorial control.

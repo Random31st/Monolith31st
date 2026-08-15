@@ -13,6 +13,7 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using System.Numerics;
+using Content.Server._Crescent.ShipShields.Components;
 
 
 namespace Content.Server._Crescent.ShipShields;
@@ -58,6 +59,13 @@ public sealed partial class ShipShieldsSystem : EntitySystem
 
             if (emitter.Accumulator < EmitterUpdateRate)
                 continue;
+
+            // Exodus-begin fire-control event-driven UI updates
+            var previousDamage = emitter.Damage;
+            var previousRecharging = emitter.Recharging;
+            var previousOverload = emitter.OverloadAccumulator;
+            var previousShield = emitter.Shield;
+            // Exodus-end
 
             if (CalculateLoadDamage(emitter) >= emitter.MaxDraw)
                 emitter.Recharging = true;
@@ -113,14 +121,24 @@ public sealed partial class ShipShieldsSystem : EntitySystem
                 }
                 _audio.PlayGlobal(emitter.PowerUpSound, filter, true, emitter.PowerUpSound.Params);
             }
-            else if ((emitter.Recharging || emitter.OverloadAccumulator > 0) && emitter.Shield is not null)
+            else if ((emitter.Recharging || emitter.OverloadAccumulator > 0) && emitter.Shield is not null || HasComp<ShipShieldDisabledGridComponent>(Transform(uid).GridUid))
             {
                 UnshieldEntity(parent.Value);
                 emitter.Shield = null;
                 emitter.Shielded = null;
-                _audio.PlayGlobal(emitter.PowerDownSound, filter, true, emitter.PowerUpSound.Params);
+                if (!HasComp<ShipShieldDisabledGridComponent>(Transform(uid).GridUid))
+                    _audio.PlayGlobal(emitter.PowerDownSound, filter, true, emitter.PowerUpSound.Params);
             }
 
+            // Exodus-begin fire-control event-driven UI updates
+            if (!previousDamage.Equals(emitter.Damage)
+                || previousRecharging != emitter.Recharging
+                || !previousOverload.Equals(emitter.OverloadAccumulator)
+                || previousShield != emitter.Shield)
+            {
+                RaiseShieldStateChanged(parent);
+            }
+            // Exodus-end
         }
     }
 
@@ -240,12 +258,15 @@ public sealed partial class ShipShieldsSystem : EntitySystem
 
     private void OnEmitterShutdown(EntityUid uid, ShipShieldEmitterComponent emitter, ComponentShutdown args) // Mono
     {
+        var grid = Transform(uid).GridUid; // Exodus fire-control event-driven UI updates
         if (emitter.Shielded != null)
         {
             UnshieldEntity(emitter.Shielded.Value);
             emitter.Shield = null;
             emitter.Shielded = null;
         }
+
+        RaiseShieldStateChanged(grid); // Exodus fire-control event-driven UI updates
     }
 
     /// <summary>
@@ -260,7 +281,7 @@ public sealed partial class ShipShieldsSystem : EntitySystem
         if (TryComp<ShipShieldedComponent>(entity, out var existingShielded))
             return existingShielded.Shield;
 
-        if (!Resolve(entity, ref mapGrid, false))
+        if (!Resolve(entity, ref mapGrid, false) || HasComp<ShipShieldDisabledGridComponent>(Transform(entity).GridUid))
             return EntityUid.Invalid;
 
         var prototype = ShipShieldPrototype;

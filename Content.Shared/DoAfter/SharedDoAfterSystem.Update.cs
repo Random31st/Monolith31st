@@ -142,6 +142,8 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
             doAfter.StartTime = GameTiming.CurTime;
             doAfter.Completed = false;
         }
+
+        RaiseDoAfterMovementSlowdownChanged(doAfter); // Exodus do-after-movement-slowdown
     }
 
     private bool ShouldCancel(DoAfter doAfter,
@@ -164,12 +166,11 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
         if (args.Target is { } target && !xformQuery.TryGetComponent(target, out targetXform))
             return true;
 
-        TransformComponent? usedXform = null;
-        if (args.Used is { } @using && !xformQuery.TryGetComponent(@using, out usedXform))
+        if (args.Used is { } @using && !xformQuery.HasComp(@using))
             return true;
 
         // TODO: Re-use existing xform query for these calculations.
-        if (args.BreakOnMove && !(!args.BreakOnWeightlessMove && _gravity.IsWeightless(args.User, xform: userXform)))
+        if (args.BreakOnMove && !(!args.BreakOnWeightlessMove && _gravity.IsWeightless(args.User)))
         {
             // Whether the user has moved too much from their original position.
             if (!_transform.InRange(userXform.Coordinates, doAfter.UserPosition, args.MovementThreshold))

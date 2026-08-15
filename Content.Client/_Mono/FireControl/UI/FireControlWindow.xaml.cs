@@ -35,11 +35,6 @@ public sealed partial class FireControlWindow : FancyWindow
 
     private FireControlConsoleBoundInterfaceState? _currentState;
 
-    // Exodus-Start
-    private const float UpdateTimer = 1f;
-    private float _updateAccumulator;
-    // Exodus-End
-
     public FireControlWindow()
     {
         RobustXamlLoader.Load(this);
@@ -50,6 +45,14 @@ public sealed partial class FireControlWindow : FancyWindow
         SelectBallisticButton.OnPressed += SelectBallisticWeapons;
         SelectEnergyButton.OnPressed += SelectEnergyWeapons;
         SelectMissileButton.OnPressed += SelectMissileWeapons;
+
+        // Exodus-begin upstream fire-control radar filters
+        IFFToggle.OnToggled += OnIFFTogglePressed;
+        IFFToggle.Pressed = NavRadar.ShowIFF;
+
+        DockToggle.OnToggled += OnDockTogglePressed;
+        DockToggle.Pressed = NavRadar.ShowDocks;
+        // Exodus-end
 
         // Exodus: Shield status
         ShieldLoadBar.ForegroundStyleBoxOverride = new StyleBoxFlat()
@@ -81,6 +84,20 @@ public sealed partial class FireControlWindow : FancyWindow
 
         UpdateAllWeaponButtonTexts();
     }
+
+    // Exodus-begin upstream fire-control radar filters
+    private void OnIFFTogglePressed(BaseButton.ButtonEventArgs args)
+    {
+        NavRadar.ShowIFF ^= true;
+        args.Button.Pressed = NavRadar.ShowIFF;
+    }
+
+    private void OnDockTogglePressed(BaseButton.ButtonEventArgs args)
+    {
+        NavRadar.ShowDocks ^= true;
+        args.Button.Pressed = NavRadar.ShowDocks;
+    }
+    // Exodus-end
 
     private void SelectBallisticWeapons(BaseButton.ButtonEventArgs args)
     {
@@ -352,14 +369,7 @@ public sealed partial class FireControlWindow : FancyWindow
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
-        _updateAccumulator += args.DeltaSeconds;
-
-        if (_updateAccumulator > UpdateTimer)
-        {
-            OnServerRefresh?.Invoke(); // a crutch, what can you make me?
-            _updateAccumulator = 0;
-        }
-
+        // Exodus: Full states are server-event-driven; only local progress needs per-frame updates.
         UpdateReloadProgress();
     }
 
