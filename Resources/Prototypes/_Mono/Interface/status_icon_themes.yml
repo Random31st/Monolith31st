@@ -8,7 +8,7 @@
   id: Monolith
   name: exodus-status-icon-theme-monolith
   order: 2
-  partStatusPath: /Textures/_Crescent/Interface/Targeting/Status
+  partStatusPath: /Textures/_Crescent/Interface/Targeting/Status/
   alertIcons:
     LowOxygen:
     - sprite: /Textures/_Crescent/Interface/Alerts/breathing.rsi

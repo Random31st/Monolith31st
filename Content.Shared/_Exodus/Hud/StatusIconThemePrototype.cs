@@ -34,6 +34,7 @@ public sealed partial class StatusIconThemePrototype : IPrototype
 
     /// <summary>
     /// Directory containing the body part RSI files used by the damage indicator.
+    /// Must end with a slash so resource validation treats it as a directory.
     /// </summary>
     [DataField(required: true)]
     public ResPath PartStatusPath { get; private set; }

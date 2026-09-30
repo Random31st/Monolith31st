@@ -2,13 +2,13 @@
   id: Standard
   name: exodus-status-icon-theme-standard
   order: 0
-  partStatusPath: /Textures/_Shitmed/Interface/Targeting/Status
+  partStatusPath: /Textures/_Shitmed/Interface/Targeting/Status/
 
 - type: statusIconTheme
   id: Exodus
   name: exodus-status-icon-theme-exodus
   order: 1
-  partStatusPath: /Textures/_Exodus/Interface/Targeting/Status
+  partStatusPath: /Textures/_Exodus/Interface/Targeting/Status/
   alertIcons:
     LowOxygen:
     - sprite: /Textures/_Exodus/Interface/Alerts/breathing.rsi
