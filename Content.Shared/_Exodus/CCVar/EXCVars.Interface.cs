@@ -8,5 +8,5 @@ public sealed partial class EXCVars
     /// Status icon theme prototype used for alerts and the body damage indicator.
     /// </summary>
     public static readonly CVarDef<string> StatusIconTheme =
-        CVarDef.Create("exds.status_icon_theme", "Standard", CVar.CLIENTONLY | CVar.ARCHIVE);
+        CVarDef.Create("exds.status_icon_theme", "Monolith", CVar.CLIENTONLY | CVar.ARCHIVE);
 }
